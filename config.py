@@ -29,6 +29,13 @@ class Config:
         print('SECRET KEY ENV VAR NOT SET! SHOULD NOT SEE IN PRODUCTION')
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 
+    # Mongo
+    MONGODB_SETTINGS = dict(
+        host=os.environ.get('DEV_DATABASE_HOST') or '127.0.0.1',
+        port=os.environ.get('DEV_DATABASE_PORT') or '27017',
+        db=os.environ.get('DEV_DATABASE_HOST') or 'db',
+    )
+
     # Email
     MAIL_SERVER = os.environ.get('MAIL_SERVER') or 'smtp.sendgrid.net'
     MAIL_PORT = os.environ.get('MAIL_PORT') or 587

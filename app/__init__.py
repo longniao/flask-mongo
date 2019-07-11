@@ -1,13 +1,13 @@
-import os
+# -*- coding: utf-8 -*-
 
+import os
 from flask import Flask
 from flask_assets import Environment
 from flask_compress import Compress
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_rq import RQ
-from mongoengine import *
-from flask_pymongo import PyMongo
+from flask_mongoengine import MongoEngine
 from flask_wtf.csrf import CSRFProtect
 
 from app.assets import app_css, app_js, vendor_css, vendor_js
@@ -16,7 +16,7 @@ from config import config
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 mail = Mail()
-db = SQLAlchemy()
+db = MongoEngine()
 csrf = CSRFProtect()
 compress = Compress()
 
