@@ -10,7 +10,7 @@ from flask_rq import RQ
 from flask_mongoengine import MongoEngine
 from flask_wtf.csrf import CSRFProtect
 
-from app.assets import app_css, app_js, vendor_css, vendor_js
+from app.utils.assets import app_css, app_js, vendor_css, vendor_js
 from config import config
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -62,15 +62,5 @@ def create_app(config_name):
     if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
         from flask_sslify import SSLify
         SSLify(app)
-
-    # Create app blueprints
-    from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
-
-    from .account import account as account_blueprint
-    app.register_blueprint(account_blueprint, url_prefix='/account')
-
-    from .admin import admin as admin_blueprint
-    app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
     return app

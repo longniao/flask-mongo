@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from .. import db, login_manager
+
 class Task(db.Document):
     task_id = db.StringField(required=True)
     title = db.StringField(required=True, max_length=50)
