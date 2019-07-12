@@ -1,66 +1,32 @@
 # -*- coding: utf-8 -*-
 
-import os
 from flask import Flask
-from flask_assets import Environment
-from flask_compress import Compress
-from flask_login import LoginManager
-from flask_mail import Mail
-from flask_rq import RQ
+from flask_cors import CORS
+from flask_restful import Api
 from flask_mongoengine import MongoEngine
-from flask_wtf.csrf import CSRFProtect
+from flask_login import LoginManager
 
-from app.utils.assets import app_css, app_js, vendor_css, vendor_js
-from config import config
+app = Flask(__name__)
+cors_options = {"supports_credentials": True}
+cors = CORS(app, **cors_options)
+api = Api(app)
 
-basedir = os.path.abspath(os.path.dirname(__file__))
+app.config.from_object('dev')
 
-mail = Mail()
 db = MongoEngine()
-csrf = CSRFProtect()
-compress = Compress()
+db.init_app(app)
 
-# Set up Flask-Login
+# login_manager & load_user
 login_manager = LoginManager()
-login_manager.session_protection = 'strong'
-login_manager.login_view = 'account.login'
+login_manager.init_app(app)
 
+from app.models.user import User
+@login_manager.user_loader
+def load_user(user_id):
+    return User.objects(user_id=user_id).first()
 
-def create_app(config_name):
-    app = Flask(__name__)
-    app.config.from_object(config[config_name])
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    # not using sqlalchemy event system, hence disabling it
-
-    config[config_name].init_app(app)
-
-    # Set up extensions
-    mail.init_app(app)
-    db.init_app(app)
-    login_manager.init_app(app)
-    csrf.init_app(app)
-    compress.init_app(app)
-    RQ(app)
-
-    # Register Jinja template functions
-    from .utils import register_template_utils
-    register_template_utils(app)
-
-    # Set up asset pipeline
-    assets_env = Environment(app)
-    dirs = ['assets/styles', 'assets/scripts']
-    for path in dirs:
-        assets_env.append_path(os.path.join(basedir, path))
-    assets_env.url_expire = True
-
-    assets_env.register('app_css', app_css)
-    assets_env.register('app_js', app_js)
-    assets_env.register('vendor_css', vendor_css)
-    assets_env.register('vendor_js', vendor_js)
-
-    # Configure SSL if platform supports it
-    if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
-        from flask_sslify import SSLify
-        SSLify(app)
-
-    return app
+# Import routes
+from app.routes import home
+from app.routes import auth
+from app.routes import user
+from app.routes import task

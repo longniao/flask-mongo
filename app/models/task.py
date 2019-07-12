@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from .. import db, login_manager
+from app import db
+
 
 class Task(db.Document):
+    user_id = db.IntField(required=True)
     task_id = db.StringField(required=True)
     title = db.StringField(required=True, max_length=50)
     description = db.StringField(required=True, max_length=1000)
@@ -12,6 +14,7 @@ class Task(db.Document):
 
     def to_json(self):
         return {
+            "user_id": self.user_id,
             "task_id": self.task_id,
             "title": self.title,
             "description": self.description,
@@ -19,4 +22,3 @@ class Task(db.Document):
             "createtime": self.createtime.strftime("%Y-%m-%d %H:%M:%S"),
             "completetime": self.completetime.strftime("%Y-%m-%d %H:%M:%S") if self.done else ""
         }
-
