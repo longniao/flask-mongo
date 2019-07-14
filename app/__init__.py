@@ -1,32 +1,66 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 from flask import Flask
+from flask_assets import Environment
+from flask_compress import Compress
 from flask_cors import CORS
 from flask_restful import Api
 from flask_mongoengine import MongoEngine
 from flask_login import LoginManager
+from flask_mail import Mail
+from flask_rq import RQ
+from flask_wtf.csrf import CSRFProtect
 
-app = Flask(__name__)
-cors_options = {"supports_credentials": True}
-cors = CORS(app, **cors_options)
-api = Api(app)
+from config import config
+from app.utils.assets import app_css, app_js, vendor_css, vendor_js
 
-app.config.from_object('dev')
-
+# 全局变量
+basedir = os.path.abspath(os.path.dirname(__file__))
+mail = Mail()
 db = MongoEngine()
-db.init_app(app)
+csrf = CSRFProtect()
+compress = Compress()
 
-# login_manager & load_user
+# Set up Flask-Login
 login_manager = LoginManager()
-login_manager.init_app(app)
+login_manager.session_protection = 'strong'
+login_manager.login_view = 'account.login'
 
-from app.models.user import User
-@login_manager.user_loader
-def load_user(user_id):
-    return User.objects(user_id=user_id).first()
+def create_app(config_name):
+    '''
+    创建APP
+    :param config_name:
+    :return:
+    '''
+    app = Flask(__name__)
+    app.config.from_object(config[config_name])
+    config[config_name].init_app(app)
 
-# Import routes
-from app.routes import home
-from app.routes import auth
-from app.routes import user
-from app.routes import task
+    cors_options = {"supports_credentials": True}
+    cors = CORS(app, **cors_options)
+    api = Api(app)
+
+    db.init_app(app)
+    login_manager.init_app(app)
+
+    # Set up asset pipeline
+    assets_env = Environment(app)
+    dirs = ['assets/styles', 'assets/scripts']
+    for path in dirs:
+        assets_env.append_path(os.path.join(basedir, path))
+    assets_env.url_expire = True
+
+    assets_env.register('app_css', app_css)
+    assets_env.register('app_js', app_js)
+    assets_env.register('vendor_css', vendor_css)
+    assets_env.register('vendor_js', vendor_js)
+
+    # import routers
+    from app.routers import main
+    from app.routers import auth
+    from app.routers import account
+    from app.routers import task
+
+    return app

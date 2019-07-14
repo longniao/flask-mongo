@@ -6,7 +6,7 @@ SECRET_KEY = "secret_key"
 
 # MongoEngine config
 MONGODB_SETTINGS = {
-    'db': 'todo',
+    'db': 'flask_mongo',
     'host': 'localhost',
     'port': 27017
 }

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from app import app
+from flask import Blueprint, render_template
+
+account = Blueprint('account', __name__)
 
 from flask import jsonify, request
 from flask_login import current_user, login_required
@@ -8,7 +10,7 @@ from flask_login import current_user, login_required
 from app.models.user import User
 
 
-@app.route('/user', methods=['GET'])
+@account.route('/user', methods=['GET'])
 def getUser():
     if current_user.is_authenticated:
         return jsonify({'status': 0, 'user': current_user.to_json()})
@@ -16,7 +18,7 @@ def getUser():
         return jsonify({'err': 'Not login.'})
 
 
-@app.route('/user/email', methods=['PUT'])
+@account.route('/user/email', methods=['PUT'])
 @login_required
 def putUserEmail():
     if not request.json or not 'email' in request.json:
@@ -30,7 +32,7 @@ def putUserEmail():
         return jsonify({'status': 0, 'msg': 'Email has been modified.', 'user': current_user.to_json()})
 
 
-@app.route('/user/pwd', methods=['PUT'])
+@account.route('/user/pwd', methods=['PUT'])
 @login_required
 def putUserPWD():
     if not request.json or not 'current_pwd' in request.json or not 'new_pwd' in request.json:
