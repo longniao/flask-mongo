@@ -7,6 +7,8 @@ class Counter(db.Document):
     _id = db.StringField(required=True)
     next = db.IntField(required=True)
 
+    meta = {'collection': 'counter'}
+
     def to_json(self):
         return {
             "_id": self._id,
