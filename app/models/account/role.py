@@ -9,9 +9,8 @@ class Permission:
 
 class Role(db.Document):
     role_id = db.IntField(required=True)
-    name = db.StringField(required=True, max_length=100)
-    email = db.StringField(max_length=200)
-    pwd = db.StringField(requied=True, min_length=6)
+    role_name = db.StringField(required=True, max_length=100)
+    role_email = db.StringField(max_length=200)
     createtime = db.DateTimeField(required=True)
 
     def to_json(self):
@@ -44,14 +43,13 @@ class Role(db.Document):
             )
         }
         for r in roles:
-            role = Role.query.filter_by(name=r).first()
+            role = Role.objects(name=r).first()
             if role is None:
                 role = Role(name=r)
-            role.permissions = roles[r][0]
+            role.role_id = roles[r][0]
             role.index = roles[r][1]
             role.default = roles[r][2]
-            db.session.add(role)
-        db.session.commit()
+            role.save()
 
     def __repr__(self):
         return '<Role \'%s\'>' % self.name
