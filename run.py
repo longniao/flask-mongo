@@ -9,7 +9,8 @@ from redis import Redis
 from rq import Connection, Queue, Worker
 
 from app import create_app, db
-from app.models.user import Role, User
+
+from app.models.account import Role, User
 from config import Config
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')

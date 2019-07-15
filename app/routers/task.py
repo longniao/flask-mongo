@@ -5,10 +5,9 @@ from datetime import datetime
 
 from flask import Blueprint, render_template, jsonify
 from flask_login import current_user, login_required
+from app.models.task import Task
 
 task = Blueprint('task', __name__)
-
-from app.models.task import Task
 
 
 @task.route('/todo/task', methods=['POST'])

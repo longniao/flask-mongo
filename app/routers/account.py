@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, jsonify, request
+from flask_login import current_user, login_required
+from app.models.account import User
 
 account = Blueprint('account', __name__)
-
-from flask import jsonify, request
-from flask_login import current_user, login_required
-
-from app.models.user import User
 
 
 @account.route('/user', methods=['GET'])

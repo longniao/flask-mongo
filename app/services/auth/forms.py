@@ -12,7 +12,7 @@ from wtforms.fields import (
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import Email, EqualTo, InputRequired, Length
 
-from app.models.user import User
+from app.models.account import User
 
 
 class LoginForm(FlaskForm):

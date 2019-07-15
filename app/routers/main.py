@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, jsonify
 
 main = Blueprint('main', __name__)
 
-from flask import jsonify
 
 @main.route('/')
 def index():

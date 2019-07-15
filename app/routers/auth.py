@@ -20,7 +20,6 @@ from flask_login import (
 from flask_rq import get_queue
 
 from app import db
-
 from app.services.auth.forms import (
     ChangeEmailForm,
     ChangePasswordForm,
@@ -30,8 +29,7 @@ from app.services.auth.forms import (
     RequestResetPasswordForm,
     ResetPasswordForm,
 )
-
-from app.models.user import User
+from app.models.account import User
 from app.utils.email import send_email
 
 auth = Blueprint('auth', __name__)

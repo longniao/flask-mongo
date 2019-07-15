@@ -58,9 +58,16 @@ def create_app(config_name):
     assets_env.register('vendor_js', vendor_js)
 
     # import routers
-    from app.routers import main
-    from app.routers import auth
-    from app.routers import account
-    from app.routers import task
+    from app.routers import main_blueprint
+    app.register_blueprint(main_blueprint)
+
+    from app.routers import auth_blueprint
+    app.register_blueprint(auth_blueprint)
+
+    from app.routers import account_blueprint
+    app.register_blueprint(account_blueprint)
+
+    from app.routers import task_blueprint
+    app.register_blueprint(task_blueprint)
 
     return app

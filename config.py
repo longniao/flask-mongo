@@ -44,18 +44,14 @@ class Config:
     EMAIL_SENDER = '{app_name} Admin <{email}>'.format(
         app_name=APP_NAME, email=MAIL_USERNAME)
 
-    REDIS_URL = os.getenv('REDISTOGO_URL') or 'http://localhost:6379'
-
-    RAYGUN_APIKEY = os.environ.get('RAYGUN_APIKEY')
-
     # Parse the REDIS_URL to set RQ config variables
-    urllib.parse.uses_netloc.append('redis')
-    url = urllib.parse.urlparse(REDIS_URL)
+    RQ_DEFAULT_HOST = os.environ.get('REDIS_HOST') or 'localhost'
+    RQ_DEFAULT_PORT = os.environ.get('REDIS_PORT') or 6379
+    RQ_DEFAULT_PASSWORD = os.environ.get('REDIS_PASSWORD') or None
+    RQ_DEFAULT_DB = os.environ.get('REDIS_DB') or 0
 
-    RQ_DEFAULT_HOST = url.hostname
-    RQ_DEFAULT_PORT = url.port
-    RQ_DEFAULT_PASSWORD = url.password
-    RQ_DEFAULT_DB = 0
+    # Redis
+    REDIS_URL = 'http://%s:%s' % (RQ_DEFAULT_HOST, RQ_DEFAULT_PORT)
 
     @staticmethod
     def init_app(app):
@@ -65,38 +61,31 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     ASSETS_DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
+    MONGO_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or None
 
     @classmethod
     def init_app(cls, app):
-        print('THIS APP IS IN DEBUG MODE. \
-                YOU SHOULD NOT SEE THIS IN PRODUCTION.')
+        print('THIS APP IS IN DEBUG MODE. YOU SHOULD NOT SEE THIS IN PRODUCTION.')
 
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
+    MONGO_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or None
     WTF_CSRF_ENABLED = False
 
     @classmethod
     def init_app(cls, app):
-        print('THIS APP IS IN TESTING MODE.  \
-                YOU SHOULD NOT SEE THIS IN PRODUCTION.')
+        print('THIS APP IS IN TESTING MODE.  YOU SHOULD NOT SEE THIS IN PRODUCTION.')
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+    MONGO_DATABASE_URI = os.environ.get('PROD_DATABASE_URL') or None
     SSL_DISABLE = (os.environ.get('SSL_DISABLE') or 'True') == 'True'
 
     @classmethod
     def init_app(cls, app):
         Config.init_app(app)
         assert os.environ.get('SECRET_KEY'), 'SECRET_KEY IS NOT SET!'
-
-        flask_raygun.Provider(app, app.config['RAYGUN_APIKEY']).attach()
 
 
 class HerokuConfig(ProductionConfig):
