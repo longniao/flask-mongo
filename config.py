@@ -6,7 +6,7 @@ import urllib.parse
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-if os.path.exists('config.env'):
+if os.path.exists('.env'):
     print('Importing environment from config.env file')
     for line in open('config.env'):
         var = line.strip().split('=')
