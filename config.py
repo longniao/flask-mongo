@@ -2,13 +2,14 @@
 
 import os
 import sys
-import urllib.parse
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-if os.path.exists('.env'):
-    print('Importing environment from config.env file')
-    for line in open('config.env'):
+config_file = '.env'
+if os.path.exists(config_file):
+    print('Importing environment from %s file' % config_file)
+    for line in open(config_file):
         var = line.strip().split('=')
         if len(var) == 2:
             os.environ[var[0]] = var[1].replace("\"", "")
