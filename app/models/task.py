@@ -12,6 +12,8 @@ class Task(db.Document):
     createtime = db.DateTimeField(required=True)
     completetime = db.DateTimeField()
 
+    meta = {'collection': 'task', 'allow_inheritance': True}
+
     def to_json(self):
         return {
             "user_id": self.user_id,

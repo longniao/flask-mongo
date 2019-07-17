@@ -54,6 +54,13 @@ class Config:
     # Redis
     REDIS_URL = 'http://%s:%s' % (RQ_DEFAULT_HOST, RQ_DEFAULT_PORT)
 
+    # Mongo
+    MONGODB_DB = os.environ.get('MONGODB_DB') or 'flask_mongo'
+    MONGODB_HOST = os.environ.get('MONGODB_HOST') or 'localhost'
+    MONGODB_PORT = os.environ.get('MONGODB_PORT') or 27017
+    MONGODB_USERNAME = os.environ.get('MONGODB_USERNAME') or None
+    MONGODB_PASSWORD = os.environ.get('MONGODB_PASSWORD') or None
+
     @staticmethod
     def init_app(app):
         pass

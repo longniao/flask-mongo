@@ -7,10 +7,10 @@ from flask import Blueprint, render_template, jsonify
 from flask_login import current_user, login_required
 from app.models.task import Task
 
-task = Blueprint('task', __name__)
+todo = Blueprint('todo', __name__)
 
 
-@task.route('/todo/task', methods=['POST'])
+@todo.route('/task', methods=['POST'])
 @login_required
 def postTask():
     if not request.json or not 'task' in request.json:
@@ -28,7 +28,7 @@ def postTask():
     return jsonify({'status': 0, 'task_id': task['task_id']})
 
 
-@task.route('/todo/task/<task_id>', methods=['GET'])
+@todo.route('/task/<task_id>', methods=['GET'])
 @login_required
 def getTask(task_id):
     task = Task.objects(user_id=current_user.user_id, task_id=task_id).first()
@@ -38,14 +38,14 @@ def getTask(task_id):
         return jsonify({'status': 0, 'task': task.to_json()})
 
 
-@task.route('/todo/tasks', methods=['GET'])
-@login_required
+@todo.route('/tasks', methods=['GET'])
 def getTasks():
-    tasks = Task.objects(user_id=current_user.user_id)
+    tasks = Task.objects()
+    print(tasks._query)
     return jsonify({'status': 0, 'tasks': [task.to_json() for task in tasks]})
 
 
-@task.route('/todo/task/<task_id>', methods=['PUT'])
+@todo.route('/task/<task_id>', methods=['PUT'])
 @login_required
 def putTask(task_id):
     task = Task.objects(user_id=current_user.user_id, task_id=task_id).first()
@@ -63,7 +63,7 @@ def putTask(task_id):
         return jsonify({'status': 0, 'task': task.to_json()})
 
 
-@task.route('/todo/task/<task_id>', methods=['DELETE'])
+@todo.route('/task/<task_id>', methods=['DELETE'])
 @login_required
 def deleteTask(task_id):
     task = Task.objects(user_id=current_user.user_id, task_id=task_id).first()

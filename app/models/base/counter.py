@@ -3,11 +3,11 @@
 from app import db
 
 
-class Counter(db.Document):
+class CounterMixin(db.Document):
     _id = db.StringField(required=True)
     next = db.IntField(required=True)
 
-    meta = {'collection': 'counter'}
+    meta = {'collection': 'counter', 'allow_inheritance': True}
 
     def to_json(self):
         return {

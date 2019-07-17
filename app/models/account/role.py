@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import arrow
+
 from app import db
+from app.models.base.counter import CounterMixin
 
 
 class Permission:
@@ -10,27 +13,25 @@ class Permission:
 class Role(db.Document):
     role_id = db.IntField(required=True)
     role_name = db.StringField(required=True, max_length=100)
-    role_email = db.StringField(max_length=200)
-    createtime = db.DateTimeField(required=True)
+    index = db.StringField(required=True)
+    permissions = db.IntField(required=True, max_length=11, default=0)
+    enable = db.BooleanField(required=True, default=True)
+    createtime = db.DateTimeField(required=True, default=arrow.utcnow().datetime)
+
+    meta = {'collection': 'role', 'allow_inheritance': True}
 
     def to_json(self):
         return {
             "user_id": self.user_id,
             "name": self.name,
-            "email": self.email
+            "permissions": self.permissions,
         }
 
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
     def get_id(self):
-        return str(self.user_id)
+        return str(self.role_id)
+
+    def get_name(self):
+        return str(self.role_name)
 
     @staticmethod
     def insert_roles():
@@ -42,14 +43,17 @@ class Role(db.Document):
                 False  # grants all permissions
             )
         }
+        roles = Role.objects.first()
+        print('roles:', roles.__dict__)
+        return False
         for r in roles:
-            role = Role.objects(name=r).first()
+            role = Role.objects(role_name=r).first()
+            print('role:', role.explain())
             if role is None:
-                role = Role(name=r)
+                print('None')
+                role = Role(role_name=r)
             role.role_id = roles[r][0]
             role.index = roles[r][1]
-            role.default = roles[r][2]
+            role.enable = roles[r][2]
+            print(role.__dict__)
             role.save()
-
-    def __repr__(self):
-        return '<Role \'%s\'>' % self.name
