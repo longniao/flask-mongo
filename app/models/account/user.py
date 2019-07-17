@@ -3,6 +3,7 @@
 import arrow
 
 from app import db
+from app.models.base.counter import Counter
 
 
 class User(db.Document):
@@ -12,6 +13,7 @@ class User(db.Document):
     password = db.StringField(requied=True)
     timezone = db.StringField(requied=True, max_length=6)
     user_info = db.DictField(requied=True)
+    role_id = db.IntField(required=True)
     confirmed = db.BooleanField(required=True, default=False)
     must_change_password = db.BooleanField(required=True, default=False)
     banned = db.BooleanField(required=True, default=False)
@@ -19,12 +21,18 @@ class User(db.Document):
     created_time = db.DateTimeField(required=True, default=arrow.utcnow().datetime)
     updated_time = db.DateTimeField(required=True, default=arrow.utcnow().datetime)
 
+    def save(self):
+        if self.user_id is None:
+            self.user_id = Counter.get_id('user')
+        super(User, self).save()
+
     def to_json(self):
         return {
             "user_id": self.user_id,
             "user_name": self.user_name,
             "email": self.email,
             "timezone": self.timezone,
+            "role_id": self.role_id,
             "confirmed": self.confirmed,
             "must_change_password": self.must_change_password,
             "banned": self.banned,

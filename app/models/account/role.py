@@ -3,7 +3,7 @@
 import arrow
 
 from app import db
-from app.models.base.counter import CounterMixin
+from app.models.base.counter import Counter
 
 
 class Permission:
@@ -22,8 +22,9 @@ class Role(db.Document):
 
     def to_json(self):
         return {
-            "user_id": self.user_id,
-            "name": self.name,
+            "role_id": self.role_id,
+            "role_name": self.role_name,
+            "index": self.index,
             "permissions": self.permissions,
         }
 
@@ -40,20 +41,15 @@ class Role(db.Document):
             'Administrator': (
                 Permission.ADMINISTER,
                 'admin',
-                False  # grants all permissions
+                True
             )
         }
-        roles = Role.objects.first()
-        print('roles:', roles.__dict__)
-        return False
+
         for r in roles:
             role = Role.objects(role_name=r).first()
-            print('role:', role.explain())
             if role is None:
-                print('None')
                 role = Role(role_name=r)
             role.role_id = roles[r][0]
             role.index = roles[r][1]
             role.enable = roles[r][2]
-            print(role.__dict__)
             role.save()

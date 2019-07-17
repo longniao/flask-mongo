@@ -71,21 +71,22 @@ def setup_general():
     """Runs the set-up needed for both local development and production.
        Also sets up first admin user."""
     Role.insert_roles()
-    admin_query = Role.objects(name='Administrator')
-    if admin_query.first() is not None:
-        if User.query.objects(email=Config.ADMIN_EMAIL).first() is None:
+    role_admin = Role.objects(role_name='Administrator').first()
+    if role_admin is not None:
+        if User.objects(email=Config.ADMIN_EMAIL).first() is None:
             user = User(
-                user_info=dict(
-                    first_name='Account',
-                    last_name='Account',
-                ),
                 user_name='admin',
                 password=Config.ADMIN_PASSWORD,
+                role_id=role_admin.role_id,
                 confirmed=True,
-                email=Config.ADMIN_EMAIL
+                email=Config.ADMIN_EMAIL,
+                user_info=dict(
+                    first_name='Admin',
+                    last_name='Account',
+                )
             )
             user.save()
-            print('Added administrator {}'.format(user.user_info()))
+            print('Added administrator {}'.format(user.to_json()))
 
 
 @manager.command

@@ -3,21 +3,22 @@
 from app import db
 
 
-class CounterMixin(db.Document):
-    _id = db.StringField(required=True)
-    next = db.IntField(required=True)
+class Counter(db.Document):
+    name = db.StringField(required=True)
+    next_id = db.IntField(required=True)
 
     meta = {'collection': 'counter', 'allow_inheritance': True}
 
     def to_json(self):
         return {
-            "_id": self._id,
-            "next": self.next,
+            "name": self.name,
+            "next_id": self.next_id,
         }
 
-    def get_id(self, name = '_defalut_'):
-        counter = Counter.objects(_id=name).update_one(set__next=1, upsert=True)
-        return counter.next
+    @staticmethod
+    def get_id(name = '_defalut_'):
+        Counter.objects(name=name).update_one(set__next_id=1, upsert=True)
+        return Counter.objects(name=name).first().next_id
 
     def __repr__(self):
-        return '<Counter name:\'%s\', next:\'%s\'>' % (self._id, self.next)
+        return '<Counter name:\'%s\', next_id:\'%s\'>' % (self.name, self.next_id)
