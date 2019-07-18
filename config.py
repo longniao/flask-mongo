@@ -47,7 +47,7 @@ class Config:
 
     # Parse the REDIS_URL to set RQ config variables
     RQ_DEFAULT_HOST = os.environ.get('REDIS_HOST') or 'localhost'
-    RQ_DEFAULT_PORT = os.environ.get('REDIS_PORT') or 6379
+    RQ_DEFAULT_PORT = int(os.environ.get('REDIS_PORT')) or 6379
     RQ_DEFAULT_PASSWORD = os.environ.get('REDIS_PASSWORD') or None
     RQ_DEFAULT_DB = os.environ.get('REDIS_DB') or 0
 
@@ -57,7 +57,7 @@ class Config:
     # Mongo
     MONGODB_DB = os.environ.get('MONGODB_DB') or 'flask_mongo'
     MONGODB_HOST = os.environ.get('MONGODB_HOST') or 'localhost'
-    MONGODB_PORT = os.environ.get('MONGODB_PORT') or 27017
+    MONGODB_PORT = int(os.environ.get('MONGODB_PORT')) or 27017
     MONGODB_USERNAME = os.environ.get('MONGODB_USERNAME') or None
     MONGODB_PASSWORD = os.environ.get('MONGODB_PASSWORD') or None
 

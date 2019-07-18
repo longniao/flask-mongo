@@ -17,7 +17,7 @@ class Counter(db.Document):
 
     @staticmethod
     def get_id(name = '_defalut_'):
-        Counter.objects(name=name).update_one(set__next_id=1, upsert=True)
+        Counter.objects(name=name).modify(upsert=True, new=True, inc__next_id=1)
         return Counter.objects(name=name).first().next_id
 
     def __repr__(self):
