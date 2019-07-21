@@ -1,72 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import os
-import sys
+import os, sys
+from app.library.config.parser import Parser
 
 
-basedir = os.path.abspath(os.path.dirname(__file__))
+config_file = './conf/dev.conf'
+parser = Parser()
+parser.load(config_file)
 
-config_file = '.env'
-if os.path.exists(config_file):
-    print('Importing environment from %s file' % config_file)
-    for line in open(config_file):
-        var = line.strip().split('=')
-        if len(var) == 2:
-            os.environ[var[0]] = var[1].replace("\"", "")
-
-
-class Config:
-    APP_NAME = os.environ.get('APP_NAME') or 'Flask-Mongo'
-
-    if os.environ.get('SECRET_KEY'):
-        SECRET_KEY = os.environ.get('SECRET_KEY')
-    else:
-        SECRET_KEY = 'SECRET_KEY_ENV_VAR_NOT_SET'
-        print('SECRET KEY ENV VAR NOT SET! SHOULD NOT SEE IN PRODUCTION')
-
-    # Email
-    MAIL_SERVER = os.environ.get('MAIL_SERVER') or 'smtp.sendgrid.net'
-    MAIL_PORT = os.environ.get('MAIL_PORT') or 587
-    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') or True
-    MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL') or False
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER')
-
-    # Analytics
-    GOOGLE_ANALYTICS_ID = os.environ.get('GOOGLE_ANALYTICS_ID') or ''
-    SEGMENT_API_KEY = os.environ.get('SEGMENT_API_KEY') or ''
-
-    # Admin account
-    ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD') or 'password'
-    ADMIN_EMAIL = os.environ.get(
-        'ADMIN_EMAIL') or 'flask-base-admin@example.com'
-    EMAIL_SUBJECT_PREFIX = '[{}]'.format(APP_NAME)
-    EMAIL_SENDER = '{app_name} Admin <{email}>'.format(
-        app_name=APP_NAME, email=MAIL_USERNAME)
-
-    # Parse the REDIS_URL to set RQ config variables
-    RQ_DEFAULT_HOST = os.environ.get('REDIS_HOST') or 'localhost'
-    RQ_DEFAULT_PORT = int(os.environ.get('REDIS_PORT')) or 6379
-    RQ_DEFAULT_PASSWORD = os.environ.get('REDIS_PASSWORD') or None
-    RQ_DEFAULT_DB = os.environ.get('REDIS_DB') or 0
-
-    # Redis
-    REDIS_URL = 'http://%s:%s' % (RQ_DEFAULT_HOST, RQ_DEFAULT_PORT)
-
-    # Mongo
-    MONGODB_DB = os.environ.get('MONGODB_DB') or 'flask_mongo'
-    MONGODB_HOST = os.environ.get('MONGODB_HOST') or 'localhost'
-    MONGODB_PORT = int(os.environ.get('MONGODB_PORT')) or 27017
-    MONGODB_USERNAME = os.environ.get('MONGODB_USERNAME') or None
-    MONGODB_PASSWORD = os.environ.get('MONGODB_PASSWORD') or None
-
-    @staticmethod
-    def init_app(app):
-        pass
-
-
-class DevelopmentConfig(Config):
+class DevelopmentConfig(parser._config):
     DEBUG = True
     ASSETS_DEBUG = True
     MONGO_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or None
@@ -76,7 +18,7 @@ class DevelopmentConfig(Config):
         print('THIS APP IS IN DEBUG MODE. YOU SHOULD NOT SEE THIS IN PRODUCTION.')
 
 
-class TestingConfig(Config):
+class TestingConfig(parser._config):
     TESTING = True
     MONGO_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or None
     WTF_CSRF_ENABLED = False
@@ -86,7 +28,7 @@ class TestingConfig(Config):
         print('THIS APP IS IN TESTING MODE.  YOU SHOULD NOT SEE THIS IN PRODUCTION.')
 
 
-class ProductionConfig(Config):
+class ProductionConfig(parser._config):
     MONGO_DATABASE_URI = os.environ.get('PROD_DATABASE_URL') or None
     SSL_DISABLE = (os.environ.get('SSL_DISABLE') or 'True') == 'True'
 
