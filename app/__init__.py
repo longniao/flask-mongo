@@ -43,13 +43,15 @@ def create_app(config_name):
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 
-    # print(app.config.__dict__)
+    # Set up extensions
     cors_options = {"supports_credentials": True}
     cors = CORS(app, **cors_options)
     api = Api(app)
 
+    mail.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
+    csrf.init_app(app)
 
     # Set up asset pipeline
     assets_env = Environment(app)
