@@ -54,7 +54,6 @@ def register():
             template='account/email/confirm',
             user=user,
             confirm_link=confirm_link)
-        flash('A confirmation link has been sent to {}.'.format(user.email),
-              'warning')
+        flash('A confirmation link has been sent to {}.'.format(user.email), 'warning')
         return redirect(url_for('main.index'))
     return render_template('auth/register.html', form=form)

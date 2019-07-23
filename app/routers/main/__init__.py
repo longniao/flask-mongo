@@ -5,4 +5,6 @@ from flask import Blueprint
 main_blueprint = Blueprint('main', __name__)
 
 
-from .home import *
+from .index import *
+from .about import *
+

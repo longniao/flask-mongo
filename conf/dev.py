@@ -29,7 +29,8 @@ class Config:
         'MAIL_DEFAULT_SENDER': '',
     }
 
-    REDIS_URL='redis://localhost:27017/0'
+    #REDIS_URL = 'redis://username:password@localhost:27017/0'
+    REDIS_URL = 'redis://localhost:27017/0'
 
     MYSQL_SLOW_DB_QUERY_TIME=0.5
     SQLALCHEMY_BINDS = dict(
