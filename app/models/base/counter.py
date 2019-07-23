@@ -7,7 +7,7 @@ class Counter(db.Document):
     name = db.StringField(required=True)
     next_id = db.IntField(required=True)
 
-    meta = {'db_alias': 'base-db', 'collection': 'counter', 'allow_inheritance': True}
+    meta = {'db_alias': 'base', 'collection': 'counter', 'allow_inheritance': True}
 
     def to_json(self):
         return {

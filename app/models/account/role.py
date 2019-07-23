@@ -18,7 +18,7 @@ class Role(db.Document):
     enable = db.BooleanField(required=True, default=True)
     createtime = db.DateTimeField(required=True, default=arrow.utcnow().datetime)
 
-    meta = {'collection': 'role', 'allow_inheritance': True}
+    meta = {'db_alias': 'account', 'collection': 'role', 'allow_inheritance': True}
 
     def to_json(self):
         return {
