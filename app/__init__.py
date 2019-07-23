@@ -34,10 +34,16 @@ def create_app(config_name):
     :param config_name:
     :return:
     '''
-    app = Flask(__name__)
+    app = Flask(
+        __name__,
+        template_folder=config[config_name].TEMPLATE_FOLDER,
+        static_folder=config[config_name].STATIC_FOLDER,
+        static_url_path=config[config_name].STATIC_URL_PATH
+    )
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 
+    # print(app.config.__dict__)
     cors_options = {"supports_credentials": True}
     cors = CORS(app, **cors_options)
     api = Api(app)

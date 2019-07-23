@@ -34,7 +34,7 @@ from app.library.email import send_email
 
 
 @auth_blueprint.route('/register', methods=['POST'])
-def registerUser():
+def register():
     if not request.json or not 'name' in request.json or not 'pwd' in request.json:
         return jsonify({'err': 'Request not Json or miss name/pwd'})
     elif User.objects(name=request.json['name']).first():

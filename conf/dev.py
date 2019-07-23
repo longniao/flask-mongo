@@ -15,8 +15,9 @@ class Config:
     SECRET_KEY="__SECRET_KEY__"
     WTF_CSRF_ENABLED=True
     TEMPLATE_FOLDER="%s/website/templates" % basedir
-    STATIC_FOLDER="%s/website/static" % basedir
+    STATIC_FOLDER="%s/website/assets" % basedir
     STATIC_URL_PATH="/static"
+    xxx='11111'
 
     MAIL_SETTINGS = {
         'MAIL_SERVER': 'smtpdm.aliyun.com',
