@@ -35,17 +35,16 @@ from app.library.email import send_email
 
 @auth_blueprint.route('/login', methods=['GET','POST'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user is not None and user.password_hash is not None and \
-                user.verify_password(form.password.data):
-            login_user(user, form.remember_me.data)
-            flash('You are now logged in. Welcome back!', 'success')
-            return redirect(request.args.get('next') or url_for('main.index'))
-        else:
-            flash('Invalid email or password.', 'form-error')
-    return render_template('auth/login.html', form=form)
+    if not request.json or not 'name' in request.json or not 'pwd' in request.json:
+        return jsonify({'err': 'Request not Json or miss name/pwd'})
+    else:
+        user = User.objects(
+            name=request.json['name'], pwd=request.json['pwd']).first()
+    if user:
+        login_user(user)
+        return jsonify({'status': 0, 'user_id': user.get_id(), 'msg': 'Login success.'})
+    else:
+        return jsonify({'err': 'Login fail.'})
 
 
 @auth_blueprint.route('/logout', methods=['POST'])

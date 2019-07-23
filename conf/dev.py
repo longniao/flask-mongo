@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import os
+
+basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+
 class Config:
     '''
     default config
@@ -10,8 +14,8 @@ class Config:
     APP_NAME='Flask-Mongo'
     SECRET_KEY="__SECRET_KEY__"
     WTF_CSRF_ENABLED=True
-    TEMPLATE_FOLDER="%(PROJECT_PATH)s/template"
-    STATIC_FOLDER="%(PROJECT_PATH)s/static"
+    TEMPLATE_FOLDER="%s/website/templates" % basedir
+    STATIC_FOLDER="%s/website/static" % basedir
     STATIC_URL_PATH="/static"
 
     MAIL_SETTINGS = {

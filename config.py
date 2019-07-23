@@ -68,4 +68,4 @@ config = {
     'heroku': HerokuConfig,
     'unix': UnixConfig
 }
-config_env = 'production'
+config_env = 'default'
