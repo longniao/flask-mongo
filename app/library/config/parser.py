@@ -29,7 +29,7 @@ class Parser(object):
         get config
         :return:
         '''
-        return self._config
+        return self._config.instance()
 
     def parse(self, section, options):
         '''

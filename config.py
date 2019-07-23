@@ -2,25 +2,25 @@
 
 import os, sys
 from app.library.config.parser import Parser
+from conf.dev import Config
 
-
+'''
 config_file = './conf/dev.conf'
 parser = Parser()
 parser.load(config_file)
+'''
 
-class DevelopmentConfig(parser._config):
+class DevelopmentConfig(Config):
     DEBUG = True
     ASSETS_DEBUG = True
-    MONGO_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or None
 
     @classmethod
     def init_app(cls, app):
         print('THIS APP IS IN DEBUG MODE. YOU SHOULD NOT SEE THIS IN PRODUCTION.')
 
 
-class TestingConfig(parser._config):
+class TestingConfig(Config):
     TESTING = True
-    MONGO_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or None
     WTF_CSRF_ENABLED = False
 
     @classmethod
@@ -28,14 +28,13 @@ class TestingConfig(parser._config):
         print('THIS APP IS IN TESTING MODE.  YOU SHOULD NOT SEE THIS IN PRODUCTION.')
 
 
-class ProductionConfig(parser._config):
-    MONGO_DATABASE_URI = os.environ.get('PROD_DATABASE_URL') or None
-    SSL_DISABLE = (os.environ.get('SSL_DISABLE') or 'True') == 'True'
+class ProductionConfig(Config):
+    SSL_DISABLE = True
 
     @classmethod
     def init_app(cls, app):
         Config.init_app(app)
-        assert os.environ.get('SECRET_KEY'), 'SECRET_KEY IS NOT SET!'
+        assert Config.SECRET_KEY, 'SECRET_KEY IS NOT SET!'
 
 
 class HerokuConfig(ProductionConfig):
@@ -69,3 +68,4 @@ config = {
     'heroku': HerokuConfig,
     'unix': UnixConfig
 }
+config_env = 'production'

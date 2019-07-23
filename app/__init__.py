@@ -14,7 +14,7 @@ from flask_rq import RQ
 from flask_wtf.csrf import CSRFProtect
 
 from config import config
-from app.utils.assets import app_css, app_js, vendor_css, vendor_js
+from app.library.assets import app_css, app_js, vendor_css, vendor_js
 
 # 全局变量
 basedir = os.path.abspath(os.path.dirname(__file__))

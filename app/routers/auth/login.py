@@ -30,7 +30,7 @@ from app.services.auth.forms import (
 )
 from . import auth_blueprint
 from app.models.account import User
-from app.utils.email import send_email
+from app.library.email import send_email
 
 
 @auth_blueprint.route('/login', methods=['POST'])

@@ -11,9 +11,9 @@ from rq import Connection, Queue, Worker
 from app import create_app, db
 
 from app.models.account import Role, User
-from config import Config
+from config import Config, config_env
 
-app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+app = create_app(config_env)
 manager = Manager(app)
 migrate = Migrate(app, db)
 

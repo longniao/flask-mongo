@@ -17,3 +17,6 @@ class Config:
     @staticmethod
     def init_app(app):
         pass
+
+    def instance(self):
+        return Config()
