@@ -33,25 +33,28 @@ from app.models.account import User
 from app.library.email import send_email
 
 
-@auth_blueprint.route('/register', methods=['POST'])
+@auth_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
-    if not request.json or not 'name' in request.json or not 'pwd' in request.json:
-        return jsonify({'err': 'Request not Json or miss name/pwd'})
-    elif User.objects(name=request.json['name']).first():
-        return jsonify({'err': 'Name is already existed.'})
-    else:
+    """Register a new user, and send them a confirmation email."""
+    form = RegistrationForm()
+    if form.validate_on_submit():
         user = User(
-            user_id=User.objects().count() + 1,
-            name=request.json['name'],
-            email=request.json['email'] if 'email' in request.json else "",
-            pwd=request.json['pwd'],
-            createtime=datetime.now()
+            user_name=form.user_name.data,
+            email=form.email.data,
+            password_hash=form.password.data,
+            role_id=1
         )
-        try:
-            user.save()
-            login_user(user)
-        except Exception as e:
-            print(e)
-            return jsonify({'err': 'Register error.'})
-    return jsonify({'status': 0, 'user_id': user['user_id'], 'msg': 'Register success.'})
-
+        user.save()
+        token = user.generate_confirmation_token()
+        confirm_link = url_for('auth.confirm', token=token, _external=True)
+        get_queue().enqueue(
+            send_email,
+            recipient=user.email,
+            subject='Confirm Your Account',
+            template='account/email/confirm',
+            user=user,
+            confirm_link=confirm_link)
+        flash('A confirmation link has been sent to {}.'.format(user.email),
+              'warning')
+        return redirect(url_for('main.index'))
+    return render_template('auth/register.html', form=form)

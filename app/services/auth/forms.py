@@ -26,16 +26,10 @@ class LoginForm(FlaskForm):
 
 
 class RegistrationForm(FlaskForm):
-    first_name = StringField(
-        'First name', validators=[InputRequired(),
-                                  Length(1, 64)])
-    last_name = StringField(
-        'Last name', validators=[InputRequired(),
-                                 Length(1, 64)])
+    user_name = StringField(
+        'User name', validators=[InputRequired(), Length(1, 64)])
     email = EmailField(
-        'Email', validators=[InputRequired(),
-                             Length(1, 64),
-                             Email()])
+        'Email', validators=[InputRequired(), Length(1, 64), Email()])
     password = PasswordField(
         'Password',
         validators=[
@@ -46,10 +40,10 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
     def validate_email(self, field):
-        if User.query.filter_by(email=field.data).first():
+        if User.objects(email=field.data).first():
             raise ValidationError('Email already registered. (Did you mean to '
                                   '<a href="{}">log in</a> instead?)'.format(
-                                    url_for('account.login')))
+                                    url_for('auth.login')))
 
 
 class RequestResetPasswordForm(FlaskForm):

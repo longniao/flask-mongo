@@ -52,6 +52,8 @@ def create_app(config_name):
     db.init_app(app)
     login_manager.init_app(app)
     csrf.init_app(app)
+    compress.init_app(app)
+    RQ(app)
 
     # Set up asset pipeline
     assets_env = Environment(app)
