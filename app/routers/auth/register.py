@@ -17,6 +17,7 @@ from flask_login import (
     logout_user,
 )
 from flask_rq import get_queue
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from app import db
 from app.services.auth.forms import (
@@ -41,7 +42,7 @@ def register():
         user = User(
             user_name=form.user_name.data,
             email=form.email.data,
-            password_hash=form.password.data,
+            password_hash=generate_password_hash(form.password.data),
             role_id=1
         )
         user.save()
