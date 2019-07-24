@@ -77,6 +77,9 @@ def create_app(config_name):
     from app.routers import account_blueprint
     app.register_blueprint(account_blueprint, url_prefix='/account')
 
+    from app.routers import admin_blueprint
+    app.register_blueprint(admin_blueprint, url_prefix='/admin')
+
     from app.routers import todo_blueprint
     app.register_blueprint(todo_blueprint, url_prefix='/todo')
 

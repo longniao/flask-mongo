@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from flask import jsonify
 from flask import render_template
+from flask_login import current_user
 
 from . import main_blueprint
 
