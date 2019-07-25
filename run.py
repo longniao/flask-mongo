@@ -7,6 +7,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Shell
 from redis import Redis
 from rq import Connection, Queue, Worker
+from werkzeug.security import generate_password_hash
 
 from app import create_app, db
 
@@ -76,7 +77,7 @@ def setup_general():
         if User.objects(email=Config.ADMIN_EMAIL).first() is None:
             user = User(
                 user_name='admin',
-                password=Config.ADMIN_PASSWORD,
+                password_hash=generate_password_hash(Config.ADMIN_PASSWORD),
                 role_id=role_admin.role_id,
                 confirmed=True,
                 email=Config.ADMIN_EMAIL,

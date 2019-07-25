@@ -19,6 +19,7 @@ class Config:
     STATIC_URL_PATH="/static"
     xxx='11111'
 
+    # Mail settings
     MAIL_SETTINGS = {
         'MAIL_SERVER': 'smtpdm.aliyun.com',
         'MAIL_PORT': 465,
@@ -28,6 +29,12 @@ class Config:
         'MAIL_PASSWORD': '',
         'MAIL_DEFAULT_SENDER': '',
     }
+    MAIL_SUBJECT_PREFIX = '[PDF CN]'
+    MAIL_SENDER = 'Flasky Mongo <noreply@example.com>'
+
+    # Admin account
+    ADMIN_PASSWORD = 'password'
+    ADMIN_EMAIL = 'flask-mongo@example.com'
 
     #REDIS_URL = 'redis://username:password@localhost:27017/0'
     REDIS_URL = 'redis://localhost:27017/0'

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os, sys
-from app.library.config.parser import Parser
 from conf.dev import Config
 
 '''

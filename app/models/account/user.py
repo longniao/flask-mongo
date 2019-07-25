@@ -9,6 +9,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from app import db, login_manager
 from app.models.base.counter import Counter
+from app.models.account import Role, Permission
 
 
 class User(UserMixin, db.Document):
@@ -19,6 +20,7 @@ class User(UserMixin, db.Document):
     timezone = db.StringField(requied=True, max_length=6)
     user_info = db.DictField(requied=True)
     role_id = db.IntField(required=True)
+    role = db.DictField()
     confirmed = db.BooleanField(required=True, default=False)
     must_change_password = db.BooleanField(required=True, default=False)
     banned = db.BooleanField(required=True, default=False)
@@ -27,6 +29,16 @@ class User(UserMixin, db.Document):
     updated_time = db.DateTimeField(required=True, default=arrow.utcnow().datetime)
 
     meta = {'db_alias': 'account', 'collection': 'user', 'allow_inheritance': True}
+
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+        if self.role is None:
+            if self.email == current_app.config['ADMIN_EMAIL']:
+                self.role = Role.objects(permissions=Permission.ADMINISTER).first()
+            if self.role is None:
+                self.role = Role.objects(default=True, enable=True).first()
+        print('self.email:', self.email)
+        print('self.role:', self.role)
 
     def save(self):
         if self.user_id is None:
