@@ -11,6 +11,10 @@ from app import db, login_manager
 from app.models.base.counter import Counter
 from app.models.account import Role, Permission
 
+default_user_info = dict(
+    first_name='',
+    last_name='',
+)
 
 class User(UserMixin, db.Document):
     user_id = db.IntField(required=True)
@@ -18,6 +22,7 @@ class User(UserMixin, db.Document):
     email = db.StringField(max_length=200)
     password_hash = db.StringField(requied=True)
     timezone = db.StringField(requied=True, max_length=6)
+    user_info = db.DictField(requied=True)
     role_id = db.IntField(required=True)
     role = db.DictField()
     confirmed = db.BooleanField(required=True, default=False)
@@ -40,6 +45,8 @@ class User(UserMixin, db.Document):
     def save(self):
         if self.user_id is None:
             self.user_id = Counter.get_id('user')
+        if self.user_info is None:
+            self.user_info = default_user_info
         super(User, self).save()
 
     def to_json(self):
@@ -56,6 +63,9 @@ class User(UserMixin, db.Document):
             "created_time": self.created_time,
             "updated_time": self.updated_time,
         }
+
+    def full_name(self):
+        return '%s %s' % (self.user_info.first_name, self.user_info.last_name)
 
     @staticmethod
     def is_authenticated():
@@ -83,9 +93,6 @@ class User(UserMixin, db.Document):
 
     def get_id(self):
         return str(self.user_id)
-
-    def get_user_info(self):
-        return self.user_info
 
     @property
     def password(self):

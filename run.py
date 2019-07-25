@@ -80,7 +80,11 @@ def setup_general():
                 password_hash=generate_password_hash(Config.ADMIN_PASSWORD),
                 role_id=role_admin.role_id,
                 confirmed=True,
-                email=Config.ADMIN_EMAIL
+                email=Config.ADMIN_EMAIL,
+                user_info=dict(
+                    first_name='Admin',
+                    last_name='Account',
+                )
             )
             user.save()
             print('Added administrator {}'.format(user.to_json()))
