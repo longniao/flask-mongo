@@ -1,37 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
-
+from app.library.email import send_email
+from app.services.auth.forms import (
+    RegistrationForm,
+)
 from flask import (
-    jsonify,
     flash,
     redirect,
     render_template,
-    request,
     url_for,
 )
-from flask_login import (
-    current_user,
-    login_required,
-    login_user,
-    logout_user,
-)
 from flask_rq import get_queue
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import generate_password_hash
 
-from app import db
-from app.services.auth.forms import (
-    ChangeEmailForm,
-    ChangePasswordForm,
-    CreatePasswordForm,
-    LoginForm,
-    RegistrationForm,
-    RequestResetPasswordForm,
-    ResetPasswordForm,
-)
+from app.models.account import User, Role
 from . import auth_blueprint
-from app.models.account import User
-from app.library.email import send_email
 
 
 @auth_blueprint.route('/register', methods=['GET', 'POST'])
@@ -39,11 +22,16 @@ def register():
     """Register a new user, and send them a confirmation email."""
     form = RegistrationForm()
     if form.validate_on_submit():
+        role = Role.objects(default=True, enable=True).first()
+        if role is not None:
+            role_id = role.role_id
+        else:
+            role_id = 1
         user = User(
             user_name=form.user_name.data,
             email=form.email.data,
             password_hash=generate_password_hash(form.password.data),
-            role_id=1
+            role_id=role_id
         )
         user.save()
         token = user.generate_confirmation_token()

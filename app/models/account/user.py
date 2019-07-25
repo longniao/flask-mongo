@@ -18,7 +18,6 @@ class User(UserMixin, db.Document):
     email = db.StringField(max_length=200)
     password_hash = db.StringField(requied=True)
     timezone = db.StringField(requied=True, max_length=6)
-    user_info = db.DictField(requied=True)
     role_id = db.IntField(required=True)
     role = db.DictField()
     confirmed = db.BooleanField(required=True, default=False)
@@ -34,11 +33,9 @@ class User(UserMixin, db.Document):
         super(User, self).__init__(**kwargs)
         if self.role is None:
             if self.email == current_app.config['ADMIN_EMAIL']:
-                self.role = Role.objects(permissions=Permission.ADMINISTER).first()
+                self.role = Role.objects(permissions=Permission.administer, enable=True).first()
             if self.role is None:
                 self.role = Role.objects(default=True, enable=True).first()
-        print('self.email:', self.email)
-        print('self.role:', self.role)
 
     def save(self):
         if self.user_id is None:
