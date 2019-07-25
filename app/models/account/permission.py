@@ -2,30 +2,57 @@
 
 
 class Permission:
-    POST_TXT = 0x01
-    POST_IMAGE = 0x02
-    POST_AUDIO = 0x03
-    POST_VIDEO = 0x04
-    POST_POLL = 0x05
-    POST_ASK = 0x06
-    POST_ACTIVITY = 0x07
-    POST_TRADE = 0x08
-    POST_HOUSE = 0x09
+    post_text = True
+    post_image = True
+    post_audio = True
+    post_video = True
+    post_poll = True
+    post_ask = True
+    post_activity = True
+    post_trade = True
+    post_house = True
 
-    COMMENT = 0x11
+    action_visit = True
+    action_search = True
+    action_invite = True
+    action_comment = True
+    action_follow = True
+    action_collect = True
+    action_share = True
+    action_up = True
+    action_down = True
 
-    EDIT = 0x21
+    content_audit = False
+    content_manage = False
+    account_manage = False
 
-    FOLLOW = 0x31
+    administer = False
 
-    COLLECT = 0x41
+    def to_json(self):
+        return {
+            "post_text": self.post_text,
+            "post_image": self.post_image,
+            "post_audio": self.post_audio,
+            "post_video": self.post_video,
+            "post_poll": self.post_poll,
+            "post_ask": self.post_ask,
+            "post_activity": self.post_activity,
+            "post_trade": self.post_trade,
+            "post_house": self.post_house,
 
-    SHARE = 0x51
+            "action_visit": self.action_visit,
+            "action_search": self.action_search,
+            "action_invite": self.action_invite,
+            "action_comment": self.action_comment,
+            "action_follow": self.action_follow,
+            "action_collect": self.action_collect,
+            "action_share": self.action_share,
+            "action_up": self.action_up,
+            "action_down": self.action_down,
 
-    UP = 0x61
-    DOWN = 0x62
+            "content_audit": self.content_audit,
+            "content_manage": self.content_manage,
+            "account_manage": self.account_manage,
 
-    CONTENT_AUDIT = 0x91
-    CONTENT_MANAGE = 0x92
-    ACCOUNT_MANAGE = 0x93
-    ADMINISTER = 0x99
+            "administer": self.administer,
+        }
