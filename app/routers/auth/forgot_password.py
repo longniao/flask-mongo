@@ -1,36 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
-
+from app.library.email import send_email
+from app.models.account import User
+from app.services.auth.forms import RequestResetPasswordForm
 from flask import (
-    jsonify,
     flash,
     redirect,
     render_template,
     request,
     url_for,
 )
-from flask_login import (
-    current_user,
-    login_required,
-    login_user,
-    logout_user,
-)
+from flask_login import current_user
 from flask_rq import get_queue
 
-from app import db
-from app.services.auth.forms import (
-    ChangeEmailForm,
-    ChangePasswordForm,
-    CreatePasswordForm,
-    LoginForm,
-    RegistrationForm,
-    RequestResetPasswordForm,
-    ResetPasswordForm,
-)
 from . import auth_blueprint
-from app.models.account import User
-from app.library.email import send_email
 
 
 @auth_blueprint.route('/forgot-password', methods=['GET'])

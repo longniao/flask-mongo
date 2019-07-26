@@ -88,28 +88,3 @@ class CreatePasswordForm(FlaskForm):
         'Confirm new password', validators=[InputRequired()])
     submit = SubmitField('Set password')
 
-
-class ChangePasswordForm(FlaskForm):
-    old_password = PasswordField('Old password', validators=[InputRequired()])
-    new_password = PasswordField(
-        'New password',
-        validators=[
-            InputRequired(),
-            EqualTo('new_password2', 'Passwords must match.')
-        ])
-    new_password2 = PasswordField(
-        'Confirm new password', validators=[InputRequired()])
-    submit = SubmitField('Update password')
-
-
-class ChangeEmailForm(FlaskForm):
-    email = EmailField(
-        'New email', validators=[InputRequired(),
-                                 Length(1, 64),
-                                 Email()])
-    password = PasswordField('Password', validators=[InputRequired()])
-    submit = SubmitField('Update email')
-
-    def validate_email(self, field):
-        if User.query.filter_by(email=field.data).first():
-            raise ValidationError('Email already registered.')

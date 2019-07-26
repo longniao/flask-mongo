@@ -6,7 +6,6 @@ from flask_login import current_user, login_required
 from . import account_blueprint
 
 
-@account_blueprint.route('/')
 @account_blueprint.route('/manage')
 @login_required
 def manage():

@@ -45,7 +45,7 @@ class Role(db.Document):
         roles = dict()
         roles['User'] = dict(
             permissions=permissions,
-            index='main',
+            index='account',
             default=True,
             enable=True,
         )
