@@ -26,7 +26,7 @@ compress = Compress()
 # Set up Flask-Login
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
-login_manager.login_view = 'account.login'
+login_manager.login_view = 'auth.login'
 
 def create_app(config_name):
     '''
@@ -54,6 +54,10 @@ def create_app(config_name):
     csrf.init_app(app)
     compress.init_app(app)
     RQ(app)
+
+    # Register Jinja template functions
+    from app.library.utils import register_template_utils
+    register_template_utils(app)
 
     # Set up asset pipeline
     assets_env = Environment(app)

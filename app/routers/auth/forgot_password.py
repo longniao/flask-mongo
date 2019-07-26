@@ -38,5 +38,5 @@ def forgot_password():
                 next=request.args.get('next'))
         flash('A password reset link has been sent to {}.'.format(
             form.email.data), 'warning')
-        return redirect(url_for('account.login'))
+        return redirect(url_for('auth.login'))
     return render_template('account/reset_password.html', form=form)

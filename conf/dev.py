@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import urllib.parse
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
@@ -17,7 +18,6 @@ class Config:
     TEMPLATE_FOLDER="%s/website/templates" % basedir
     STATIC_FOLDER="%s/website/assets" % basedir
     STATIC_URL_PATH="/static"
-    xxx='11111'
 
     # Mail settings
     MAIL_SETTINGS = {
@@ -37,14 +37,19 @@ class Config:
     ADMIN_EMAIL = 'flask-mongo@example.com'
 
     #REDIS_URL = 'redis://username:password@localhost:27017/0'
-    REDIS_URL = 'redis://localhost:27017/0'
+    REDIS_URL = 'redis://localhost:6379/0'
 
+    # Parse the REDIS_URL to set RQ_REDIS_URL
+    RQ_REDIS_URL = REDIS_URL
+
+    # Mysql
     MYSQL_SLOW_DB_QUERY_TIME=0.5
     SQLALCHEMY_BINDS = dict(
         base='mysql+pymysql://work:work@localhost:3306/base',
         account='mysql+pymysql://work:work@localhost:3306/account',
     )
 
+    # Mongodb
     MONGODB_SETTINGS = [{
         'ALIAS': 'base',
         'HOST': 'localhost',

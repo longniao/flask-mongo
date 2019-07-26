@@ -26,8 +26,7 @@ def change_email():
         if current_user.verify_password(form.password.data):
             new_email = form.email.data
             token = current_user.generate_email_change_token(new_email)
-            change_email_link = url_for(
-                'account.change_email', token=token, _external=True)
+            change_email_link = url_for('account.change_email', token=token, _external=True)
             get_queue().enqueue(
                 send_email,
                 recipient=new_email,
@@ -39,7 +38,7 @@ def change_email():
                 change_email_link=change_email_link)
             flash('A confirmation link has been sent to {}.'.format(new_email),
                   'warning')
-            return redirect(url_for('main.index'))
+            return redirect(url_for('account.index'))
         else:
             flash('Invalid email or password.', 'form-error')
     return render_template('account/manage.html', form=form)
