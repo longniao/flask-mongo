@@ -72,13 +72,13 @@ def setup_general():
     """Runs the set-up needed for both local development and production.
        Also sets up first admin user."""
     Role.insert_roles()
-    role_admin = Role.objects(role_name='Administrator').first()
+    role_admin = Role.objects(name='Administrator').first()
     if role_admin is not None:
         if User.objects(email=Config.ADMIN_EMAIL).first() is None:
             user = User(
                 user_name='admin',
                 password_hash=generate_password_hash(Config.ADMIN_PASSWORD),
-                role_id=role_admin.role_id,
+                role_id=role_admin.pkid,
                 confirmed=True,
                 email=Config.ADMIN_EMAIL,
                 user_info=dict(

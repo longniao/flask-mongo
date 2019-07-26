@@ -38,13 +38,13 @@
     {% if current_user.is_authenticated %}
       {% set endpoints = [
         ('account.manage', 'Your Account', 'settings'),
-        ('account.logout', 'Log out', 'sign out')
+        ('auth.logout', 'Log out', 'sign out'),
       ] %}
       {{ render_menu_items(endpoints) }}
     {% else %}
       {% set endpoints = [
         ('auth.register', 'Register', 'list layout'),
-        ('auth.login', 'Log In', 'sign in')
+        ('auth.login', 'Log In', 'sign in'),
       ] %}
       {{ render_menu_items(endpoints) }}
     {% endif %}

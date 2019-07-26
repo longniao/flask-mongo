@@ -60,29 +60,23 @@ class User(UserMixin, db.Document):
 
     @property
     def role(self):
-        return Role.objects(role_id=self.role_id, enable=True).first()
-
-    def can(self, permissions):
-        return self.role is not None and \
-            (self.role.permissions & permissions) == permissions
-
-    def is_admin(self):
-        return self.can(Permission.ADMINISTER)
+        return Role.objects(pkid=self.role_id, enable=True).first()
 
     def full_name(self):
-        return '%s %s' % (self.user_info.first_name, self.user_info.last_name)
+        return '%s %s' % (self.user_info['first_name'], self.user_info['last_name'])
 
-    @staticmethod
-    def is_authenticated():
+    def can(self, permission):
+        return self.role is not None and self.role.permissions['permission'] == True
+
+    def is_admin(self):
+        return self.can('administer')
+
+    def is_active(self):
         return True
 
-    @staticmethod
-    def is_active():
+    @property
+    def is_authenticated(self):
         return True
-
-    @staticmethod
-    def is_anonymous(self):
-        return False
 
     def is_confirmed(self):
         return self.confirmed
@@ -190,4 +184,4 @@ login_manager.anonymous_user = AnonymousUser
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.objects(user_id=int(user_id)).all()
+    return User.objects(user_id=int(user_id)).first()

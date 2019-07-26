@@ -24,7 +24,7 @@ def register():
     if form.validate_on_submit():
         role = Role.objects(default=True, enable=True).first()
         if role is not None:
-            role_id = role.role_id
+            role_id = role.pkid
         else:
             role_id = 1
         user = User(

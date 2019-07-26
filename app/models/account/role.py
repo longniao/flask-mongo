@@ -8,8 +8,8 @@ from app.models.account import Permission
 
 
 class Role(db.Document):
-    role_id = db.IntField(required=True)
-    role_name = db.StringField(required=True, max_length=100)
+    pkid = db.IntField(required=True)
+    name = db.StringField(required=True, max_length=100)
     index = db.StringField(required=True)
     permissions = db.DictField(required=True)
     default = db.BooleanField(required=True, default=False)
@@ -24,20 +24,20 @@ class Role(db.Document):
             self.permissions = Permission().to_json()
 
     def save(self):
-        if self.role_id is None:
-            self.role_id = Counter.get_id('role')
+        if self.pkid is None:
+            self.pkid = Counter.get_id('role')
         super(Role, self).save()
 
     def to_json(self):
         return {
-            "role_id": self.role_id,
-            "role_name": self.role_name,
+            "pkid": self.pkid,
+            "name": self.name,
             "index": self.index,
             "permissions": self.permissions,
         }
 
-    def get_id(self):
-        return str(self.role_id)
+    def get_pkid(self):
+        return str(self.pkid)
 
     @staticmethod
     def insert_roles():
@@ -69,9 +69,9 @@ class Role(db.Document):
         )
 
         for k, v in roles.items():
-            role = Role.objects(role_name=k).first()
+            role = Role.objects(name=k).first()
             if role is None:
-                role = Role(role_name=k)
+                role = Role(name=k)
             role.permissions = v['permissions']
             role.index = v['index']
             role.default = v['default']
