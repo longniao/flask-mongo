@@ -66,7 +66,7 @@ class User(UserMixin, db.Document):
         return '%s %s' % (self.user_info['first_name'], self.user_info['last_name'])
 
     def can(self, permission):
-        return self.role is not None and self.role.permissions['permission'] == True
+        return self.role is not None and self.role.permissions[permission] == True
 
     def is_admin(self):
         return self.can('administer')
