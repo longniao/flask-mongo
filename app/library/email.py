@@ -19,3 +19,7 @@ def send_email(recipient, subject, template, **kwargs):
         msg.body = render_template(template + '.txt', **kwargs)
         msg.html = render_template(template + '.html', **kwargs)
         mail.send(msg)
+
+def test(url):
+    import requests
+    requests.get('http://localhost/%s' % url)

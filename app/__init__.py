@@ -18,6 +18,7 @@ from app.library.assets import app_css, app_js, vendor_css, vendor_js
 
 # 全局变量
 basedir = os.path.abspath(os.path.dirname(__file__))
+rq = RQ()
 mail = Mail()
 db = MongoEngine()
 csrf = CSRFProtect()
@@ -53,7 +54,7 @@ def create_app(config_name):
     login_manager.init_app(app)
     csrf.init_app(app)
     compress.init_app(app)
-    RQ(app)
+    rq.init_app(app)
 
     # Register Jinja template functions
     from app.library.utils import register_template_utils
