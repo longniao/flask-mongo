@@ -9,6 +9,7 @@ from flask_login import (
     current_user,
     login_required,
 )
+from flask_babel import lazy_gettext as _l
 
 from . import auth_blueprint
 
@@ -20,7 +21,7 @@ def confirm(token):
     if current_user.confirmed:
         return redirect(url_for('main.index'))
     if current_user.confirm_account(token):
-        flash('Your account has been confirmed.', 'success')
+        flash(_l('Your account has been confirmed.'), 'success')
     else:
-        flash('The confirmation link is invalid or has expired.', 'error')
+        flash(_l('The confirmation link is invalid or has expired.'), 'error')
     return redirect(url_for('main.index'))

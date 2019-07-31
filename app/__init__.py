@@ -2,7 +2,7 @@
 
 import os
 
-from flask import Flask
+from flask import Flask, request, current_app
 from flask_assets import Environment
 from flask_compress import Compress
 from flask_cors import CORS
@@ -13,6 +13,8 @@ from flask_mail import Mail
 from flask_rq import RQ
 from flask_wtf.csrf import CSRFProtect
 from flask_redis import FlaskRedis
+from flask_babel import Babel, lazy_gettext as _l
+from jinja2.ext import autoescape, with_
 
 from config import config
 from app.library.assets import app_css, app_js, vendor_css, vendor_js
@@ -25,11 +27,13 @@ db = MongoEngine()
 csrf = CSRFProtect()
 compress = Compress()
 redis_store = FlaskRedis()
+babel = Babel()
 
 # Set up Flask-Login
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
+login_manager.login_message = _l('Please log in to access this page.')
 
 def create_app(config_name):
     '''
@@ -58,6 +62,7 @@ def create_app(config_name):
     compress.init_app(app)
     rq.init_app(app)
     redis_store.init_app(app)
+    babel.init_app(app)
 
     # Register Jinja template functions
     from app.library.utils import register_template_utils
@@ -92,3 +97,8 @@ def create_app(config_name):
     app.register_blueprint(todo_blueprint, url_prefix='/todo')
 
     return app
+
+
+@babel.localeselector
+def get_locale():
+    return request.accept_languages.best_match(current_app.config['LANGUAGES'].keys())

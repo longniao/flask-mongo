@@ -12,6 +12,7 @@ from flask import (
 )
 from flask_login import current_user
 from flask_rq import get_queue
+from flask_babel import lazy_gettext as _l
 
 from . import auth_blueprint
 
@@ -31,12 +32,12 @@ def forgot_password():
             get_queue().enqueue(
                 send_email,
                 recipient=user.email,
-                subject='Reset Your Password',
+                subject=_l('Reset Your Password'),
                 template='account/email/reset_password',
                 user=user,
                 reset_link=reset_link,
                 next=request.args.get('next'))
-        flash('A password reset link has been sent to {}.'.format(
+        flash(_l('A password reset link has been sent to {}.').format(
             form.email.data), 'warning')
         return redirect(url_for('auth.login'))
     return render_template('account/reset_password.html', form=form)

@@ -42,3 +42,4 @@ flask-mongoengine
 shortuuid
 flask_restful
 Flask-redis
+flask-babel

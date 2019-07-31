@@ -11,6 +11,7 @@ from flask_login import (
     current_user,
     login_required,
 )
+from flask_babel import lazy_gettext as _l
 
 from . import account_blueprint
 
@@ -25,10 +26,10 @@ def change_password():
             current_user.password = form.new_password.data
             db.session.add(current_user)
             db.session.commit()
-            flash('Your password has been updated.', 'form-success')
+            flash(_l('Your password has been updated.'), 'form-success')
             return redirect(url_for('main.index'))
         else:
-            flash('Original password is invalid.', 'form-error')
+            flash(_l('Original password is invalid.'), 'form-error')
     return render_template('account/manage.html', form=form)
 
 

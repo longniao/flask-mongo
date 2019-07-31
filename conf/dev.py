@@ -66,6 +66,13 @@ class Config:
         'PASSWORD': None,
     }]
 
+    # Language
+    LANGUAGES = {
+        'en': 'English',
+        'es': 'Español',
+        'cn': "Chinese",
+    }
+
     @staticmethod
     def init_app(app):
         pass
