@@ -12,6 +12,7 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_rq import RQ
 from flask_wtf.csrf import CSRFProtect
+from flask_redis import FlaskRedis
 
 from config import config
 from app.library.assets import app_css, app_js, vendor_css, vendor_js
@@ -23,6 +24,7 @@ mail = Mail()
 db = MongoEngine()
 csrf = CSRFProtect()
 compress = Compress()
+redis_store = FlaskRedis()
 
 # Set up Flask-Login
 login_manager = LoginManager()
@@ -55,6 +57,7 @@ def create_app(config_name):
     csrf.init_app(app)
     compress.init_app(app)
     rq.init_app(app)
+    redis_store.init_app(app)
 
     # Register Jinja template functions
     from app.library.utils import register_template_utils

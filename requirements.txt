@@ -41,3 +41,4 @@ flask_cors
 flask-mongoengine
 shortuuid
 flask_restful
+Flask-redis
