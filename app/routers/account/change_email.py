@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from app.library.email import send_email, test
+from app.library.email import send_email
 from app.services.account.forms import ChangeEmailForm
 from flask import (
     flash,
@@ -37,8 +37,6 @@ def change_email():
                 user=current_user._get_current_object(),
                 change_email_link=change_email_link)
 
-            #test(new_email)
-            get_queue().enqueue(test, url=new_email)
             flash('A confirmation link has been sent to {}.'.format(new_email),
                   'warning')
             return redirect(url_for('account.index'))
