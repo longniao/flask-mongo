@@ -13,7 +13,7 @@ from flask_login import (
     login_required,
 )
 from flask_rq import get_queue
-from flask_babel import lazy_gettext as _l
+from flask_babel import lazy_gettext as _
 
 from . import account_blueprint
 
@@ -31,17 +31,17 @@ def change_email():
             get_queue().enqueue(
                 send_email,
                 recipient=new_email,
-                subject=_l('Confirm Your New Email'),
+                subject=_('Confirm Your New Email'),
                 template='account/email/change_email',
                 # current_user is a LocalProxy, we want the underlying user
                 # object
                 user=current_user._get_current_object(),
                 change_email_link=change_email_link)
 
-            flash(_l('A confirmation link has been sent to {}.').format(new_email),
+            flash(_('A confirmation link has been sent to {}.').format(new_email),
                   'warning')
             return redirect(url_for('account.index'))
         else:
-            flash(_l('Invalid email or password.'), 'form-error')
+            flash(_('Invalid email or password.'), 'form-error')
     return render_template('account/manage.html', form=form)
 

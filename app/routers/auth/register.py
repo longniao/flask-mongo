@@ -12,7 +12,7 @@ from flask import (
 )
 from flask_rq import get_queue
 from werkzeug.security import generate_password_hash
-from flask_babel import lazy_gettext as _l
+from flask_babel import lazy_gettext as _
 
 from app.models.account import User, Role
 from . import auth_blueprint
@@ -40,10 +40,10 @@ def register():
         get_queue().enqueue(
             send_email,
             recipient=user.email,
-            subject=_l('Confirm Your Account'),
+            subject=_('Confirm Your Account'),
             template='account/email/confirm',
             user=user,
             confirm_link=confirm_link)
-        flash(_l('A confirmation link has been sent to {}.').format(user.email), 'warning')
+        flash(_('A confirmation link has been sent to {}.').format(user.email), 'warning')
         return redirect(url_for('main.index'))
     return render_template('auth/register.html', form=form)

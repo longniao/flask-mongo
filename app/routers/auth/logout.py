@@ -8,7 +8,7 @@ from flask import (
 from flask_login import (
     logout_user,
 )
-from flask_babel import lazy_gettext as _l
+from flask_babel import lazy_gettext as _
 
 from . import auth_blueprint
 
@@ -16,5 +16,5 @@ from . import auth_blueprint
 @auth_blueprint.route('/logout', methods=['GET'])
 def logout():
     logout_user()
-    flash(_l('You have been logged out.'), 'info')
+    flash(_('You have been logged out.'), 'info')
     return redirect(url_for('main.index'))

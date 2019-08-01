@@ -13,8 +13,7 @@ from flask_mail import Mail
 from flask_rq import RQ
 from flask_wtf.csrf import CSRFProtect
 from flask_redis import FlaskRedis
-from flask_babel import Babel, lazy_gettext as _l
-from jinja2.ext import autoescape, with_
+from flask_babel import Babel, lazy_gettext as _
 
 from config import config
 from app.library.assets import app_css, app_js, vendor_css, vendor_js
@@ -33,7 +32,7 @@ babel = Babel()
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
-login_manager.login_message = _l('Please log in to access this page.')
+login_manager.login_message = _('Please log in to access this page.')
 
 def create_app(config_name):
     '''
