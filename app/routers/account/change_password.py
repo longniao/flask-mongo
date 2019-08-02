@@ -24,8 +24,7 @@ def change_password():
     if form.validate_on_submit():
         if current_user.verify_password(form.old_password.data):
             current_user.password = form.new_password.data
-            db.session.add(current_user)
-            db.session.commit()
+            current_user.save()
             flash(_('Your password has been updated.'), 'form-success')
             return redirect(url_for('main.index'))
         else:

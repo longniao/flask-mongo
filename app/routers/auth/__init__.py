@@ -8,6 +8,5 @@ auth_blueprint = Blueprint('auth', __name__)
 from .login import *
 from .logout import *
 from .register import *
-from .confirm import *
-from .forgot_password import *
+from .reset_password import *
 

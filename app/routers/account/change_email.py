@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from app.library.email import send_email
-from app.services.account.forms import ChangeEmailForm
 from flask import (
     flash,
     redirect,
@@ -16,11 +14,13 @@ from flask_rq import get_queue
 from flask_babel import lazy_gettext as _
 
 from . import account_blueprint
+from app.library.email import send_email
+from app.services.account.forms import ChangeEmailForm
 
 
 @account_blueprint.route('/change-email', methods=['GET', 'POST'])
 @login_required
-def change_email():
+def change_email_request():
     """Respond to existing user's request to change their email."""
     form = ChangeEmailForm()
     if form.validate_on_submit():
@@ -45,3 +45,13 @@ def change_email():
             flash(_('Invalid email or password.'), 'form-error')
     return render_template('account/manage.html', form=form)
 
+
+@account_blueprint.route('/change-email/<token>', methods=['GET', 'POST'])
+@login_required
+def change_email(token):
+    """Change existing user's email with provided token."""
+    if current_user.change_email(token):
+        flash(_('Your email address has been updated.'), 'success')
+    else:
+        flash(_('The confirmation link is invalid or has expired.'), 'error')
+    return redirect(url_for('main.index'))
