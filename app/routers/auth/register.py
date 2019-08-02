@@ -36,7 +36,7 @@ def register():
         )
         user.save()
         token = user.generate_confirmation_token()
-        confirm_link = url_for('auth.confirm', token=token, _external=True)
+        confirm_link = url_for('account.confirm', token=token, _external=True)
         get_queue().enqueue(
             send_email,
             recipient=user.email,

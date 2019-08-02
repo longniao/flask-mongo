@@ -20,16 +20,13 @@ class Config:
     STATIC_URL_PATH="/static"
 
     # Mail settings
-    MAIL_SETTINGS = {
-        'MAIL_SERVER': 'smtpdm.aliyun.com',
-        'MAIL_PORT': 465,
-        'MAIL_USE_TLS': True,
-        'MAIL_USE_SSL': False,
-        'MAIL_USERNAME': '',
-        'MAIL_PASSWORD': '',
-        'MAIL_DEFAULT_SENDER': '',
-    }
-    MAIL_SUBJECT_PREFIX = '[PDF CN]'
+    MAIL_SERVER = 'smtp.example.com'
+    MAIL_PORT = 25
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = False
+    MAIL_USERNAME = 'noreply@example.com'
+    MAIL_PASSWORD = ''
+    MAIL_SUBJECT_PREFIX = '[Flasky Mongo]'
     MAIL_SENDER = 'Flasky Mongo <noreply@example.com>'
 
     # Admin account
